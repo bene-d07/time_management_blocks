@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
   <title>Wochenplan Live-Anzeige</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.v3.css?v=20260421c" />
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <main class="app">
-    <section class="topbar">
+  <main class="app-shell">
+    <header class="topbar">
       <div>
         <p class="eyebrow">Live-Zeitplan</p>
         <h1 id="todayLabel">Heute</h1>
@@ -18,16 +19,18 @@
         <button id="toggleSetupBtn" class="ghost-btn hidden" type="button" aria-controls="setupCard" aria-expanded="true">Plan ändern</button>
         <div class="clock" id="clock">00:00:00</div>
       </div>
-    </section>
+    </header>
 
-    <section class="card upload-card" id="setupCard">
-      <div>
+    <section class="setup-card card" id="setupCard">
+      <div class="setup-copy">
         <h2>Datei laden</h2>
-        <p>Bitte eine Excel-Datei (.xlsx, .xls) oder CSV mit der Struktur Zeit | Montag | Dienstag | Mittwoch | Donnerstag | Freitag hochladen.</p>
+        <p>Bitte eine Excel-Datei mit der Struktur <strong>Zeit | Montag | Dienstag | Mittwoch | Donnerstag | Freitag</strong> hochladen.</p>
       </div>
+
       <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" />
+
       <div class="controls">
-        <label for="daySelect">Tag manuell wählen:</label>
+        <label for="daySelect">Tag manuell wählen</label>
         <select id="daySelect">
           <option value="Montag">Montag</option>
           <option value="Dienstag">Dienstag</option>
@@ -37,16 +40,23 @@
         </select>
         <button id="useTodayBtn" type="button">Heute automatisch</button>
       </div>
-      <p class="hint" id="status">Noch keine Datei geladen.</p>
+
+      <p class="status" id="status">Noch keine Datei geladen.</p>
     </section>
 
-    <section class="hero-grid plan-focus" id="heroGrid">
-      <article class="card hero-card focus-card glow-card">
-        <p class="eyebrow">Aktueller Block</p>
-        <div class="current-block" id="currentBlock">Keine Datei geladen</div>
-        <div class="time-range" id="currentRange">–</div>
-        <div class="countdown-wrap">
-          <span class="countdown-label">Verbleibend</span>
+    <section class="hero-grid">
+      <article class="card hero-card accent-card">
+        <div class="hero-top-row">
+          <div>
+            <p class="eyebrow">Aktueller Block</p>
+            <div class="current-block" id="currentBlock">Keine Datei geladen</div>
+            <div class="time-range" id="currentRange">–</div>
+          </div>
+          <div class="day-badge" id="activeDay">–</div>
+        </div>
+
+        <div class="countdown-panel">
+          <span class="countdown-label">Restzeit</span>
           <span class="countdown" id="countdown">–</span>
         </div>
       </article>
@@ -54,15 +64,17 @@
       <article class="card side-card">
         <p class="eyebrow">Nächster Wechsel</p>
         <div class="next-change" id="nextChange">–</div>
-        <div class="mini-muted" id="nextBlock">–</div>
+        <div class="next-block" id="nextBlock">–</div>
       </article>
     </section>
 
     <section class="lower-grid">
       <article class="card forecast-card">
         <div class="section-head">
-          <p class="eyebrow">Als Nächstes</p>
-          <span class="badge" id="activeDay">–</span>
+          <div>
+            <p class="eyebrow">Die nächsten Blöcke</p>
+            <h2>Vorschau</h2>
+          </div>
         </div>
         <div class="upcoming-list" id="upcomingList">
           <div class="empty-state">Noch keine Datei geladen.</div>
@@ -76,6 +88,6 @@
     </section>
   </main>
 
-  <script src="app.js"></script>
+  <script src="app.v3.js?v=20260421c"></script>
 </body>
 </html>
