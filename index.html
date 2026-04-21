@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wochenplan Live-Anzeige</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <main class="app">
+    <section class="topbar">
+      <div>
+        <p class="eyebrow">Live-Zeitplan</p>
+        <h1 id="todayLabel">Heute</h1>
+      </div>
+      <div class="clock" id="clock">00:00:00</div>
+    </section>
+
+    <section class="card upload-card">
+      <div>
+        <h2>Datei laden</h2>
+        <p>Bitte eine Excel-Datei (.xlsx, .xls) oder CSV mit der Struktur Zeit | Montag | Dienstag | Mittwoch | Donnerstag | Freitag hochladen.</p>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" />
+      <div class="controls">
+        <label for="daySelect">Tag manuell wählen:</label>
+        <select id="daySelect">
+          <option value="Montag">Montag</option>
+          <option value="Dienstag">Dienstag</option>
+          <option value="Mittwoch">Mittwoch</option>
+          <option value="Donnerstag">Donnerstag</option>
+          <option value="Freitag">Freitag</option>
+        </select>
+        <button id="useTodayBtn" type="button">Heute automatisch</button>
+      </div>
+      <p class="hint" id="status">Noch keine Datei geladen.</p>
+    </section>
+
+    <section class="hero-grid">
+      <article class="card hero-card">
+        <p class="eyebrow">Aktueller Block</p>
+        <div class="current-block" id="currentBlock">Keine Datei geladen</div>
+        <div class="time-range" id="currentRange">–</div>
+      </article>
+
+      <article class="card side-card">
+        <p class="eyebrow">Nächster Wechsel</p>
+        <div class="next-change" id="nextChange">–</div>
+      </article>
+    </section>
+
+    <section class="card info-card">
+      <div class="info-row"><span>Aktiver Tag</span><strong id="activeDay">–</strong></div>
+      <div class="info-row"><span>Nächster Block</span><strong id="nextBlock">–</strong></div>
+      <div class="info-row"><span>Erster Block heute</span><strong id="firstBlock">–</strong></div>
+      <div class="info-row"><span>Letzter Block heute</span><strong id="lastBlock">–</strong></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
