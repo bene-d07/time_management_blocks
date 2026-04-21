@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
-  <title>Wochenplan Live-Anzeige</title>
-  <link rel="stylesheet" href="styles.v3.css?v=20260421c" />
+  <title>Mag‘s Zeitplan</title>
+  <link rel="stylesheet" href="styles.v4.css?v=20260421pink" />
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <div>
-        <p class="eyebrow">Live-Zeitplan</p>
+        <p class="eyebrow">Mag‘s Zeitplan</p>
         <h1 id="todayLabel">Heute</h1>
       </div>
       <div class="topbar-right">
@@ -56,16 +56,23 @@
         </div>
 
         <div class="countdown-panel">
-          <span class="countdown-label">Restzeit</span>
+          <span class="countdown-label">Noch</span>
           <span class="countdown" id="countdown">–</span>
         </div>
       </article>
 
-      <article class="card side-card">
-        <p class="eyebrow">Nächster Wechsel</p>
-        <div class="next-change" id="nextChange">–</div>
-        <div class="next-block" id="nextBlock">–</div>
-      </article>
+      <div class="right-stack">
+        <article class="card side-card">
+          <p class="eyebrow">Nächster Wechsel</p>
+          <div class="next-change" id="nextChange">–</div>
+          <div class="next-block" id="nextBlock">–</div>
+        </article>
+
+        <article class="card motivation-card">
+          <p class="eyebrow">Für diese Stunde</p>
+          <div class="motivation-text" id="motivationText">Du schaffst das.</div>
+        </article>
+      </div>
     </section>
 
     <section class="lower-grid">
@@ -88,6 +95,6 @@
     </section>
   </main>
 
-  <script src="app.v3.js?v=20260421c"></script>
+  <script src="app.v4.js?v=20260421pink"></script>
 </body>
 </html>
