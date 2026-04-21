@@ -71,18 +71,18 @@ function setSetupVisibility(open) {
   isSetupOpen = open;
 
   if (!planData) {
-    setupCard.classList.remove('collapsed');
+    setupCard.style.display = 'block';
     toggleSetupBtn.classList.add('hidden');
     toggleSetupBtn.textContent = 'Plan ändern';
     return;
   }
 
   if (open) {
-    setupCard.classList.remove('collapsed');
+    setupCard.style.display = 'block';
     toggleSetupBtn.classList.remove('hidden');
     toggleSetupBtn.textContent = 'Ansicht schließen';
   } else {
-    setupCard.classList.add('collapsed');
+    setupCard.style.display = 'none';
     toggleSetupBtn.classList.remove('hidden');
     toggleSetupBtn.textContent = 'Plan ändern';
   }
@@ -172,9 +172,8 @@ function updateView() {
 
   if (!planData) return;
 
-  const day = selectedDay;
-  const entries = planData[day];
-  activeDayEl.textContent = day;
+  const entries = planData[selectedDay];
+  activeDayEl.textContent = selectedDay;
 
   if (!entries) {
     currentBlockEl.textContent = 'Kein passender Tag gefunden';
@@ -212,7 +211,7 @@ function parseWorkbook(arrayBuffer, fileName) {
   const expectedDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
   const missingDays = expectedDays.filter(day => !headers.includes(day));
   if (headers[0] !== 'Zeit') {
-    throw new Error('Die erste Spalte muss "Zeit" heißen.');
+    throw new Error('Die erste Spalte muss „Zeit“ heißen.');
   }
   if (missingDays.length) {
     throw new Error(`Diese Tages-Spalten fehlen: ${missingDays.join(', ')}`);
@@ -223,16 +222,32 @@ function parseWorkbook(arrayBuffer, fileName) {
   localStorage.setItem('weeklyPlanData', JSON.stringify(planData));
 
   const autoDay = getTodayGermanWeekday();
-  if (autoDay && planData[autoDay]) {
-    selectedDay = autoDay;
-  } else {
-    selectedDay = 'Montag';
-  }
+  selectedDay = autoDay && planData[autoDay] ? autoDay : 'Montag';
   daySelect.value = selectedDay;
 
   statusEl.textContent = `Datei geladen: ${fileName}. Aktiver Tag: ${selectedDay}.`;
   setSetupVisibility(false);
   updateView();
+}
+
+function restoreFromStorage() {
+  try {
+    const stored = localStorage.getItem('weeklyPlanData');
+    if (!stored) return;
+    planData = JSON.parse(stored);
+    const autoDay = getTodayGermanWeekday();
+    selectedDay = autoDay && planData[autoDay] ? autoDay : 'Montag';
+    daySelect.value = selectedDay;
+    const fileName = localStorage.getItem('weeklyPlanFileName') || 'gespeicherte Datei';
+    statusEl.textContent = `Gespeichert geladen: ${fileName}. Aktiver Tag: ${selectedDay}.`;
+    setSetupVisibility(false);
+    updateView();
+  } catch (error) {
+    localStorage.removeItem('weeklyPlanData');
+    localStorage.removeItem('weeklyPlanFileName');
+    statusEl.textContent = 'Gespeicherter Plan konnte nicht geladen werden.';
+    setSetupVisibility(true);
+  }
 }
 
 fileInput.addEventListener('change', async (event) => {
@@ -264,6 +279,7 @@ useTodayBtn.addEventListener('click', () => {
     statusEl.textContent = 'Heute ist Wochenende. Bitte einen Wochentag manuell auswählen.';
     return;
   }
+
   selectedDay = autoDay;
   daySelect.value = selectedDay;
   statusEl.textContent = `Automatisch auf ${selectedDay} gesetzt.`;
@@ -278,28 +294,7 @@ toggleSetupBtn.addEventListener('click', () => {
   setSetupVisibility(!isSetupOpen);
 });
 
-(function initFromStorage() {
-  const saved = localStorage.getItem('weeklyPlanData');
-  const savedName = localStorage.getItem('weeklyPlanFileName');
-  if (saved) {
-    try {
-      planData = JSON.parse(saved);
-      statusEl.textContent = `Zuletzt geladene Datei aktiv: ${savedName || 'Unbekannt'}.`;
-      const autoDay = getTodayGermanWeekday();
-      if (autoDay && planData[autoDay]) {
-        selectedDay = autoDay;
-      }
-      daySelect.value = selectedDay;
-      setSetupVisibility(false);
-    } catch {
-      localStorage.removeItem('weeklyPlanData');
-      localStorage.removeItem('weeklyPlanFileName');
-      setSetupVisibility(true);
-    }
-  } else {
-    setSetupVisibility(true);
-  }
-})();
-
+setSetupVisibility(true);
+restoreFromStorage();
 updateView();
 setInterval(updateView, 1000);
