@@ -14,10 +14,13 @@
         <p class="eyebrow">Live-Zeitplan</p>
         <h1 id="todayLabel">Heute</h1>
       </div>
-      <div class="clock" id="clock">00:00:00</div>
+      <div class="topbar-right">
+        <button id="toggleSetupBtn" class="ghost-btn hidden" type="button">Plan ändern</button>
+        <div class="clock" id="clock">00:00:00</div>
+      </div>
     </section>
 
-    <section class="card upload-card">
+    <section class="card upload-card" id="setupCard">
       <div>
         <h2>Datei laden</h2>
         <p>Bitte eine Excel-Datei (.xlsx, .xls) oder CSV mit der Struktur Zeit | Montag | Dienstag | Mittwoch | Donnerstag | Freitag hochladen.</p>
@@ -37,20 +40,20 @@
       <p class="hint" id="status">Noch keine Datei geladen.</p>
     </section>
 
-    <section class="hero-grid">
-      <article class="card hero-card">
+    <section class="hero-grid plan-focus" id="heroGrid">
+      <article class="card hero-card focus-card">
         <p class="eyebrow">Aktueller Block</p>
         <div class="current-block" id="currentBlock">Keine Datei geladen</div>
         <div class="time-range" id="currentRange">–</div>
       </article>
 
-      <article class="card side-card">
+      <article class="card side-card" id="nextCard">
         <p class="eyebrow">Nächster Wechsel</p>
         <div class="next-change" id="nextChange">–</div>
       </article>
     </section>
 
-    <section class="card info-card">
+    <section class="card info-card" id="infoCard">
       <div class="info-row"><span>Aktiver Tag</span><strong id="activeDay">–</strong></div>
       <div class="info-row"><span>Nächster Block</span><strong id="nextBlock">–</strong></div>
       <div class="info-row"><span>Erster Block heute</span><strong id="firstBlock">–</strong></div>

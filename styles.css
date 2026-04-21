@@ -19,12 +19,12 @@ body {
 }
 
 .app {
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 28px 18px 40px;
 }
 
-.topbar, .hero-grid, .controls, .info-row {
+.topbar, .hero-grid, .controls, .info-row, .topbar-right {
   display: flex;
   gap: 16px;
 }
@@ -32,6 +32,9 @@ body {
   justify-content: space-between;
   align-items: end;
   margin-bottom: 22px;
+}
+.topbar-right {
+  align-items: center;
 }
 .clock {
   font-size: clamp(2rem, 6vw, 4rem);
@@ -54,17 +57,40 @@ h1, h2 { margin: 0; }
   box-shadow: 0 18px 40px rgba(0,0,0,0.22);
 }
 .upload-card, .info-card { padding: 20px; margin-bottom: 18px; }
+.upload-card {
+  overflow: hidden;
+  max-height: 480px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease, margin 0.25s ease, padding 0.25s ease, border-width 0.25s ease;
+}
+.upload-card.collapsed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+}
 .hero-grid { align-items: stretch; margin-bottom: 18px; }
 .hero-card, .side-card { padding: 24px; }
 .hero-card { flex: 2; }
 .side-card { flex: 1; }
-.current-block {
-  font-size: clamp(2rem, 5vw, 3.8rem);
-  font-weight: 800;
-  line-height: 1.05;
-  margin-top: 12px;
+.focus-card {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.time-range, .next-change { font-size: 1.2rem; margin-top: 10px; color: var(--muted); }
+.current-block {
+  font-size: clamp(2.8rem, 8vw, 6.2rem);
+  font-weight: 800;
+  line-height: 0.95;
+  margin-top: 12px;
+  text-wrap: balance;
+}
+.time-range, .next-change { font-size: 1.35rem; margin-top: 14px; color: var(--muted); }
 input[type="file"], select, button {
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.12);
@@ -80,6 +106,14 @@ button {
   font-weight: 700;
   border: none;
 }
+.ghost-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.hidden {
+  display: none;
+}
 .controls {
   flex-wrap: wrap;
   align-items: center;
@@ -93,7 +127,13 @@ button {
 }
 .info-card .info-row:last-child { border-bottom: none; }
 
+@media (min-width: 761px) {
+  .upload-card.collapsed + .plan-focus {
+    grid-template-columns: minmax(0, 1fr) 240px;
+  }
+}
+
 @media (max-width: 760px) {
-  .topbar, .hero-grid { flex-direction: column; }
+  .topbar, .hero-grid, .topbar-right { flex-direction: column; }
   .clock { align-self: flex-start; }
 }

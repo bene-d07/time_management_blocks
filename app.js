@@ -11,6 +11,8 @@ const weekdayMap = {
 const fileInput = document.getElementById('fileInput');
 const daySelect = document.getElementById('daySelect');
 const useTodayBtn = document.getElementById('useTodayBtn');
+const toggleSetupBtn = document.getElementById('toggleSetupBtn');
+const setupCard = document.getElementById('setupCard');
 const todayLabel = document.getElementById('todayLabel');
 const clockEl = document.getElementById('clock');
 const statusEl = document.getElementById('status');
@@ -24,6 +26,7 @@ const lastBlockEl = document.getElementById('lastBlock');
 
 let planData = null;
 let selectedDay = getTodayGermanWeekday() || 'Montag';
+let isSetupOpen = true;
 daySelect.value = selectedDay;
 
 function getTodayGermanWeekday(date = new Date()) {
@@ -62,6 +65,27 @@ function toTime(minutes) {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+function setSetupVisibility(open) {
+  isSetupOpen = open;
+
+  if (!planData) {
+    setupCard.classList.remove('collapsed');
+    toggleSetupBtn.classList.add('hidden');
+    toggleSetupBtn.textContent = 'Plan ändern';
+    return;
+  }
+
+  if (open) {
+    setupCard.classList.remove('collapsed');
+    toggleSetupBtn.classList.remove('hidden');
+    toggleSetupBtn.textContent = 'Ansicht schließen';
+  } else {
+    setupCard.classList.add('collapsed');
+    toggleSetupBtn.classList.remove('hidden');
+    toggleSetupBtn.textContent = 'Plan ändern';
+  }
 }
 
 function buildDayEntries(rows, headers) {
@@ -207,6 +231,7 @@ function parseWorkbook(arrayBuffer, fileName) {
   daySelect.value = selectedDay;
 
   statusEl.textContent = `Datei geladen: ${fileName}. Aktiver Tag: ${selectedDay}.`;
+  setSetupVisibility(false);
   updateView();
 }
 
@@ -219,12 +244,18 @@ fileInput.addEventListener('change', async (event) => {
     parseWorkbook(buffer, file.name);
   } catch (error) {
     statusEl.textContent = `Fehler: ${error.message}`;
+    setSetupVisibility(true);
   }
 });
 
 daySelect.addEventListener('change', (event) => {
   selectedDay = event.target.value;
+  statusEl.textContent = `Manuell auf ${selectedDay} gesetzt.`;
   updateView();
+
+  if (planData) {
+    setSetupVisibility(false);
+  }
 });
 
 useTodayBtn.addEventListener('click', () => {
@@ -237,6 +268,14 @@ useTodayBtn.addEventListener('click', () => {
   daySelect.value = selectedDay;
   statusEl.textContent = `Automatisch auf ${selectedDay} gesetzt.`;
   updateView();
+
+  if (planData) {
+    setSetupVisibility(false);
+  }
+});
+
+toggleSetupBtn.addEventListener('click', () => {
+  setSetupVisibility(!isSetupOpen);
 });
 
 (function initFromStorage() {
@@ -246,10 +285,19 @@ useTodayBtn.addEventListener('click', () => {
     try {
       planData = JSON.parse(saved);
       statusEl.textContent = `Zuletzt geladene Datei aktiv: ${savedName || 'Unbekannt'}.`;
+      const autoDay = getTodayGermanWeekday();
+      if (autoDay && planData[autoDay]) {
+        selectedDay = autoDay;
+      }
+      daySelect.value = selectedDay;
+      setSetupVisibility(false);
     } catch {
       localStorage.removeItem('weeklyPlanData');
       localStorage.removeItem('weeklyPlanFileName');
+      setSetupVisibility(true);
     }
+  } else {
+    setSetupVisibility(true);
   }
 })();
 
