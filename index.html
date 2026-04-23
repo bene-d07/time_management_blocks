@@ -5,18 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
   <title>Mag‘s Zeitplan</title>
-  <link rel="stylesheet" href="styles.v6.css?v=20260423bigtasks" />
+  <link rel="stylesheet" href="styles.v7.css?v=20260423custom" />
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <div>
-        <p class="eyebrow">Mag‘s Zeitplan</p>
+        <p class="eyebrow" id="brandLabel">Mag‘s Zeitplan</p>
         <h1 id="todayLabel">Heute</h1>
       </div>
       <div class="topbar-right">
         <button id="toggleSetupBtn" class="ghost-btn hidden" type="button" aria-controls="setupCard" aria-expanded="true">Plan ändern</button>
+        <button id="openSettingsBtn" class="ghost-btn icon-gear-btn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" aria-label="Einstellungen öffnen">
+          <span class="gear-symbol">⚙</span>
+        </button>
         <div class="clock" id="clock">00:00:00</div>
       </div>
     </header>
@@ -97,14 +100,15 @@
     <section class="card tasks-card">
       <div class="section-head section-head-tasks">
         <div>
-          <p class="eyebrow">Ganz unten</p>
           <h2>Big Tasks</h2>
         </div>
 
-        <button id="openTaskModalBtn" class="task-add-btn" type="button" aria-haspopup="dialog" aria-controls="taskModal">
-          <span class="plus-mark">+</span>
-          <span>Task hinzufügen</span>
-        </button>
+        <div class="task-head-actions">
+          <button id="openTaskModalBtn" class="task-add-btn" type="button" aria-haspopup="dialog" aria-controls="taskModal">
+            <span class="plus-mark">+</span>
+            <span>Task hinzufügen</span>
+          </button>
+        </div>
       </div>
 
       <div class="task-list" id="taskList">
@@ -113,19 +117,20 @@
     </section>
   </main>
 
-  <div class="modal-backdrop hidden" id="taskModalBackdrop"></div>
+  <div class="modal-backdrop hidden" id="modalBackdrop"></div>
 
   <section class="task-modal hidden" id="taskModal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
     <div class="task-modal-card">
       <div class="task-modal-head">
         <div>
-          <p class="eyebrow">Neue Big Task</p>
+          <p class="eyebrow" id="taskModalEyebrow">Neue Big Task</p>
           <h2 id="taskModalTitle">Was steht an?</h2>
         </div>
         <button id="closeTaskModalBtn" class="icon-btn" type="button" aria-label="Popup schließen">×</button>
       </div>
 
       <form id="taskForm" class="task-form">
+        <input id="taskIdInput" name="taskId" type="hidden" />
         <label class="field">
           <span>Titel</span>
           <input id="taskTitleInput" name="title" type="text" maxlength="120" placeholder="z. B. Arzttermin, Geburtstag, Abgabe ..." required />
@@ -139,13 +144,66 @@
         <p class="status modal-status" id="taskFormStatus"> </p>
 
         <div class="task-form-actions">
+          <button id="deleteTaskBtn" class="danger-btn hidden" type="button">Löschen</button>
           <button id="cancelTaskBtn" class="ghost-btn" type="button">Abbrechen</button>
+          <button class="primary-btn" id="saveTaskBtn" type="submit">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="settings-modal hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="task-modal-card settings-modal-card">
+      <div class="task-modal-head">
+        <div>
+          <p class="eyebrow">Personalisierung</p>
+          <h2 id="settingsModalTitle">Ansicht anpassen</h2>
+        </div>
+        <button id="closeSettingsModalBtn" class="icon-btn" type="button" aria-label="Einstellungen schließen">×</button>
+      </div>
+
+      <form id="settingsForm" class="task-form">
+        <label class="field">
+          <span>Name im Titel</span>
+          <input id="titlePrefixInput" name="titlePrefix" type="text" maxlength="40" placeholder="z. B. Mag‘s, Mamas, Anna‘s" />
+        </label>
+
+        <div class="field">
+          <span>Farbwelt</span>
+          <div class="theme-grid" id="themeGrid">
+            <label class="theme-option">
+              <input type="radio" name="theme" value="pink" />
+              <span class="theme-swatch swatch-pink"></span>
+              <span>Pink</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="blue" />
+              <span class="theme-swatch swatch-blue"></span>
+              <span>Blau</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="violet" />
+              <span class="theme-swatch swatch-violet"></span>
+              <span>Violett</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="mint" />
+              <span class="theme-swatch swatch-mint"></span>
+              <span>Mint</span>
+            </label>
+          </div>
+        </div>
+
+        <p class="status modal-status" id="settingsStatus"> </p>
+
+        <div class="task-form-actions">
+          <button id="cancelSettingsBtn" class="ghost-btn" type="button">Abbrechen</button>
           <button class="primary-btn" type="submit">Speichern</button>
         </div>
       </form>
     </div>
   </section>
 
-  <script src="app.v6.js?v=20260423bigtasks"></script>
+  <script src="app.v7.js?v=20260423custom"></script>
 </body>
 </html>
