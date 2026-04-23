@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
   <title>Mag‘s Zeitplan</title>
-  <link rel="stylesheet" href="styles.v4.css?v=20260421pink" />
+  <link rel="stylesheet" href="styles.v6.css?v=20260423bigtasks" />
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -93,8 +93,59 @@
         <div class="info-row"><span>Letzter Block heute</span><strong id="lastBlock">–</strong></div>
       </article>
     </section>
+
+    <section class="card tasks-card">
+      <div class="section-head section-head-tasks">
+        <div>
+          <p class="eyebrow">Ganz unten</p>
+          <h2>Big Tasks</h2>
+        </div>
+
+        <button id="openTaskModalBtn" class="task-add-btn" type="button" aria-haspopup="dialog" aria-controls="taskModal">
+          <span class="plus-mark">+</span>
+          <span>Task hinzufügen</span>
+        </button>
+      </div>
+
+      <div class="task-list" id="taskList">
+        <div class="empty-state">Noch keine Big Tasks angelegt.</div>
+      </div>
+    </section>
   </main>
 
-  <script src="app.v4.js?v=20260421pink"></script>
+  <div class="modal-backdrop hidden" id="taskModalBackdrop"></div>
+
+  <section class="task-modal hidden" id="taskModal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+    <div class="task-modal-card">
+      <div class="task-modal-head">
+        <div>
+          <p class="eyebrow">Neue Big Task</p>
+          <h2 id="taskModalTitle">Was steht an?</h2>
+        </div>
+        <button id="closeTaskModalBtn" class="icon-btn" type="button" aria-label="Popup schließen">×</button>
+      </div>
+
+      <form id="taskForm" class="task-form">
+        <label class="field">
+          <span>Titel</span>
+          <input id="taskTitleInput" name="title" type="text" maxlength="120" placeholder="z. B. Arzttermin, Geburtstag, Abgabe ..." required />
+        </label>
+
+        <label class="field">
+          <span>Datum</span>
+          <input id="taskDateInput" name="date" type="date" required />
+        </label>
+
+        <p class="status modal-status" id="taskFormStatus"> </p>
+
+        <div class="task-form-actions">
+          <button id="cancelTaskBtn" class="ghost-btn" type="button">Abbrechen</button>
+          <button class="primary-btn" type="submit">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script src="app.v6.js?v=20260423bigtasks"></script>
 </body>
 </html>
